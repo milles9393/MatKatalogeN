@@ -22,7 +22,6 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
     private Button saveButton;
     private Button cancelButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +53,7 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
-
+ //hej
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
