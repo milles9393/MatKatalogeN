@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Telephony;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import com.example.matkatalog.R;
 
 public class DeclareOwnershipActivity extends AppCompatActivity {
 
+    private static final String TAG = "DeclareOwnershipActivit";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private EditText nameField;
     private ImageButton imageButton;
@@ -72,7 +74,12 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            
+            try {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            } catch (Exception e){
+                Log.d(TAG, "dispatchTakePictureIntent: asdhhasd" + e );
+            }
         }
     }
 
@@ -106,15 +113,6 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
 //
 //
 //
-
-//
-
-
-
-
-//
-//
-
 //
 //
 //
@@ -123,8 +121,9 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
 //
 //
 //
-
-
+//
+//
+//
 //
 //
 //
