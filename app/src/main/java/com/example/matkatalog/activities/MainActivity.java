@@ -2,6 +2,7 @@ package com.example.matkatalog.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bindViews();
         addListener();
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA ");
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA ");
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA ");
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA ");
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA " + getFilesDir());
+        System.out.println( " hHSADHADHSAHD AHSDHA SDHA ");
 
     }
 
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         } else{
             Toast toast = Toast.makeText(getApplicationContext(), R.string.login_wrong_password, Toast.LENGTH_SHORT);
             toast.show();
+
         }
     }
 

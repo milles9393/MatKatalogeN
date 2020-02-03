@@ -13,8 +13,7 @@ import java.util.Date;
 public class ImageHelpers {
 
 
-
-    private File createImageFile(Context context) throws IOException {
+    public static File createImageFile(Context context) throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";

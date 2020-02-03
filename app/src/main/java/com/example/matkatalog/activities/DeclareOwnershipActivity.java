@@ -1,9 +1,11 @@
 package com.example.matkatalog.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Telephony;
@@ -14,6 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.matkatalog.R;
+import com.example.matkatalog.utils.ImageHelpers;
+
+import java.io.File;
+import java.io.IOException;
 
 public class DeclareOwnershipActivity extends AppCompatActivity {
 
@@ -23,6 +29,7 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
     private ImageButton imageButton;
     private Button saveButton;
     private Button cancelButton;
+    private String currentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +78,11 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
         });
     }
 
-    private void dispatchTakePictureIntent() {
+
+   /* private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            
+
             try {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } catch (Exception e){
@@ -83,15 +91,49 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
         }
     }
 
+    */
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = ImageHelpers.createImageFile(getApplicationContext());
+            } catch (IOException ex) {}
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                currentPhoto = photoFile.getAbsolutePath();
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),
+                        "com.example.matkatalog.activities.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+
+
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageButton.setImageBitmap(imageBitmap);
+            setPic();
         }
     }
+
+
+    private void setPic(){
+        imageButton.setImageBitmap(ImageHelpers.scaleImage(imageButton.getWidth(),
+                imageButton.getHeight(),currentPhoto));
+
+    }
 }
+
+
+
 
 //
 ////////////////
