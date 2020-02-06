@@ -1,16 +1,19 @@
 package com.example.matkatalog.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +27,9 @@ import java.io.IOException;
 public class DeclareOwnershipActivity extends AppCompatActivity {
 
     private static final String TAG = "DeclareOwnershipActivit";
+    private static final String CURRENT_PHOTO = "currentPhoto";
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private EditText nameField;
     private ImageButton imageButton;
     private Button saveButton;
@@ -79,19 +84,6 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
     }
 
 
-   /* private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-            try {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            } catch (Exception e){
-                Log.d(TAG, "dispatchTakePictureIntent: asdhhasd" + e );
-            }
-        }
-    }
-
-    */
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -112,8 +104,6 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
 
-
-
         }
     }
 
@@ -124,54 +114,39 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
         }
     }
 
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString(CURRENT_PHOTO, currentPhoto);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore state members from saved instance
+        currentPhoto = savedInstanceState.getString(CURRENT_PHOTO);
+        imageButton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onGlobalLayout() {
+                imageButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setPic();
+            }
+        });
+    }
+
 
     private void setPic(){
+
+        int width = imageButton.getWidth();
+        int height = imageButton.getHeight();
+
         imageButton.setImageBitmap(ImageHelpers.scaleImage(imageButton.getWidth(),
                 imageButton.getHeight(),currentPhoto));
-
     }
 }
-
-
-
-
-//
-////////////////
-//
-
-//
-//
-//////
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
