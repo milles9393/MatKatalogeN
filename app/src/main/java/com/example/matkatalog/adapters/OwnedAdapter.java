@@ -8,36 +8,74 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.matkatalog.R;
+import com.example.matkatalog.models.Thing;
+import com.example.matkatalog.utils.ImageHelpers;
 
 import java.util.List;
 
-public class OwnedAdapter extends ArrayAdapter {
+public class OwnedAdapter extends RecyclerView.Adapter<OwnedAdapter.MyViewHolder> {
+    private List<Thing> things;
 
-    private final Context context;
-    private final List<String> values;
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
 
-    public OwnedAdapter(Context context, List values){
-        super(context, -1, values);
-        this.context = context;
-        this.values = values;
+     static class MyViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        private TextView txt;
+        private ImageView img;
+
+        public MyViewHolder(View v) {
+            super(v);
+            txt = v.findViewById(R.id.txt);
+            img = v.findViewById(R.id.img);
+        }
     }
 
+
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public OwnedAdapter (List<Thing> things) {
+        this.things = things;
+    }
+
+    // Create new views (invoked by the layout manager)
     @Override
-    public View getView(int position, View view, ViewGroup parent){
+    public OwnedAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        View rowView = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.owned_list_row, parent, false);
+        MyViewHolder vh = new MyViewHolder(rowView);
+        return vh;
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.owned_list_row, parent, false);
+        //TextView v = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.my_text_view, parent, false);
 
-        ImageView img = rowView.findViewById(R.id.img);
-        TextView txt = rowView.findViewById(R.id.txt);
-
-        img.setImageResource(R.drawable.ic_launcher_foreground);
-        txt.setText(values.get(position));
-
-        return rowView;
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        Thing t = things.get(position);
+        holder.txt.setText(t.getName());
+        holder.img.setImageBitmap(ImageHelpers.scaleImage(100, 100, t.getImgAddress()));
+    }
+
+
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return things.size();
+    }
+
+    public void addItem(List<Thing> things){
+         this.things.clear();
+         this.things.addAll(things);
+         notifyDataSetChanged();
+
+    }
 }
+
 

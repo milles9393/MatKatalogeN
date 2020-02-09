@@ -5,20 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Telephony;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.matkatalog.R;
+import com.example.matkatalog.db.AppDatabase;
+import com.example.matkatalog.models.Thing;
 import com.example.matkatalog.utils.ImageHelpers;
 
 import java.io.File;
@@ -45,8 +45,29 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
         addListeners();
     }
 
-    private void cancle(){
+    private void cancel(){
         //Todo
+
+
+        Toast hej = Toast.makeText(getApplicationContext(), "saveaSDADSADSADASDASDAS: ", Toast.LENGTH_SHORT);
+        hej.show();
+        Intent intent = new Intent(getApplicationContext(), OwnedActivity.class);
+        startActivity(intent);
+
+
+    }
+
+    public void saveThing(){
+
+        //Todo check if thing and image are there
+
+        AppDatabase DB = AppDatabase.getAppDatabase(getApplicationContext());
+        Thing thing = new Thing(nameField.getText().toString(), currentPhoto);
+
+        long id = DB.thingDoa().insert(thing);
+
+        Toast toast  = Toast.makeText(getApplicationContext(), "save to DB with ID: " + id, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     private void takePhoto(){
@@ -67,18 +88,18 @@ public class DeclareOwnershipActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
- //hej
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
+                saveThing();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancle();
+                cancel();
             }
         });
     }

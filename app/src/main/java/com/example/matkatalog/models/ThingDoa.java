@@ -23,6 +23,9 @@ public interface ThingDoa {
     @Insert
     void insertAll(Thing... users);
 
+    @Insert
+    long insert(Thing thing);
+
     @Delete
-    void delete(Thing user);
+    void delete(Thing thing);
 }
