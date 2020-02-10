@@ -1,6 +1,7 @@
 package com.example.matkatalog.models;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,7 +13,9 @@ import java.util.List;
 public interface ThingDoa {
 
     @Query("SELECT * FROM things")
-    List<Thing> getAll();
+    LiveData<List<Thing>> getAll();
+    //List<Thing> getAll();
+
 
     @Query("SELECT * FROM things WHERE uid IN (:userIds)")
     List<Thing> loadAllByIds(int[] userIds);

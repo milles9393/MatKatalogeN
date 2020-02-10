@@ -1,6 +1,9 @@
 package com.example.matkatalog.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +17,8 @@ import android.widget.ListView;
 import com.example.matkatalog.R;
 import com.example.matkatalog.adapters.OwnedAdapter;
 import com.example.matkatalog.db.AppDatabase;
+import com.example.matkatalog.models.Thing;
+import com.example.matkatalog.models.ThingViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Array;
@@ -26,19 +31,28 @@ public class OwnedActivity extends AppCompatActivity {
     private List<String> things = new ArrayList<>(Arrays.asList("book", "computer", "dator", "mus"));
     private RecyclerView recyclerView;
     private FloatingActionButton FAB;
+    private ThingViewModel thingViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owned);
-
-
         bindViews();
         AddListeners();
 
 
-        AppDatabase DB = AppDatabase.getAppDatabase(getApplicationContext());
-        OwnedAdapter adapter = new OwnedAdapter(DB.thingDoa().getAll());
+        final OwnedAdapter adapter = new OwnedAdapter(new ArrayList<Thing>());
+        //AppDatabase DB = AppDatabase.getAppDatabase(getApplicationContext());
+
+        thingViewModel = new ViewModelProvider(this).get(ThingViewModel.class);
+
+        thingViewModel.getThingsList().observe(this, new Observer<List<Thing>>() {
+            @Override
+            public void onChanged(List<Thing> things) {
+                adapter.addItem(things);
+            }
+        });
+
         recyclerView.setAdapter(adapter);
     }
 
