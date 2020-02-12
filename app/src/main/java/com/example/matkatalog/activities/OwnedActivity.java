@@ -40,9 +40,7 @@ public class OwnedActivity extends AppCompatActivity {
         bindViews();
         AddListeners();
 
-
         final OwnedAdapter adapter = new OwnedAdapter(new ArrayList<Thing>());
-        //AppDatabase DB = AppDatabase.getAppDatabase(getApplicationContext());
 
         thingViewModel = new ViewModelProvider(this).get(ThingViewModel.class);
 
@@ -76,8 +74,4 @@ public class OwnedActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutMange);
         FAB = findViewById(R.id.fab);
     }
-
-
-
-
 }
