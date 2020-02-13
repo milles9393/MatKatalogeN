@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+//
     private void bindViews() {
         loginButton = findViewById(R.id.loginButton);
         passwordField = findViewById(R.id.passwordField);
